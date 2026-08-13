@@ -237,3 +237,7 @@ jobs:
           echo "Deploying ${APP_NAME} to${DEPLOY_STAGE} environment..."
           # Insert deployment script here
 ```
+
+> [!NOTE]
+> We need to install all required dependencies before running the workflow.
+> Note that files generated during workflow execution are not saved by default.
