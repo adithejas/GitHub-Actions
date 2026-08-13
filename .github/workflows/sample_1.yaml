@@ -1,0 +1,20 @@
+name: Sample_1 Workflow
+
+on: push
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: echo "Hello, World! welcome to the first job of sample_1 workflow"
+
+      - name: Run a multi-line script
+        run: |
+          ls
+          pwd
+          echo "Current directory contents:"
+          ls -l
+
+      - name: Read a file
+        run: cat README.md
