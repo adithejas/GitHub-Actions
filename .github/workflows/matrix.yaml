@@ -13,9 +13,13 @@ jobs:
         runs-on: ${{ matrix.os }}
 
         steps:
-            - name: Docker build and push on ${{ matrix.os }} with image ${{ matrix.images }}
+            - name: Echo matrix values
               run: |
-                echo "Building Docker image for OS: ${{ matrix.os }} and Image: ${{ matrix.images }}"
-                docker build -t my-docker-image:${{ matrix.images }} 
+               echo "OS: ${{ matrix.os }}, Image: ${{ matrix.images }}"
+
+            - name: Run Docker container
+              run: |
+                echo "Running Docker container for image: ${{ matrix.images }}"
+                docker run ${{ matrix.images }}
                 
         
