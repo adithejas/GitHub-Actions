@@ -1,0 +1,28 @@
+name: matrix_testing
+
+on: 
+  workflow_dispatch:
+
+jobs:
+    strategy_matrix:
+        
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+                images: [hello-world, alpine]
+                exclude:
+                    - images: alpine
+                      os: windows-latest
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - name: Echo matrix values
+              run: |
+               echo "OS: ${{ matrix.os }}, Image: ${{ matrix.images }}"
+
+            - name: Run Docker container
+              run: |
+                echo "Running Docker container for image: ${{ matrix.images }}"
+                docker run ${{ matrix.images }}
+                
+        
