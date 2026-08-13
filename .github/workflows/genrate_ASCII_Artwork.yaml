@@ -1,7 +1,7 @@
 name: Generate ASCII Artwork
 
-on: push
-
+on: 
+  workflow_dispatch:
 jobs:
   generate_ascii_artwork:
     runs-on: ubuntu-latest
