@@ -14,7 +14,7 @@ jobs:
               run: cowsay -f dragon "Run for cover, I am a dragon!" >> dragon_artwork.txt
 
             - name: Upload ASCII artwork as artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v7
               with:
                 name: dragon_artwork
                 path: dragon_artwork.txt
@@ -24,7 +24,7 @@ jobs:
         needs: dependent_job
         steps:
             - name: Download ASCII artwork artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v8
               with:
                 name: dragon_artwork
                 path: dragon_artwork.txt
@@ -43,11 +43,11 @@ jobs:
         needs: Test_job
         steps:
             - name: Download ASCII artwork artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v8
               with:
                 name: dragon_artwork
                 path: dragon_artwork.txt
-                
+
             - name: Display ASCII artwork
               run: cat dragon_artwork.txt
 
