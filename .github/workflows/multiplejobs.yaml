@@ -1,0 +1,55 @@
+name: multiplejobs
+
+on: 
+  workflow_dispatch:
+
+jobs:
+    dependent_job:
+        runs-on: ubuntu-latest
+        steps:           
+            - name: Install Cowsay program
+              run: sudo apt-get update && sudo apt-get install -y cowsay
+
+            - name: Generate ASCII artwork
+              run: cowsay -f dragon "Run for cover, I am a dragon!" >> dragon_artwork.txt
+
+            - name: Upload ASCII artwork as artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: dragon_artwork
+                path: dragon_artwork.txt
+
+    Test_job:
+        runs-on: ubuntu-latest
+        needs: dependent_job
+        steps:
+            - name: Download ASCII artwork artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: dragon_artwork
+                path: dragon_artwork.txt
+
+            - name: Test the file existence
+              run: |
+                if [ -f dragon_artwork.txt ]; then
+                  echo "File exists."
+                  grep -i "dragon" dragon_artwork.txt
+                else
+                  echo "File does not exist."
+                fi
+
+    Deploy_job:
+        runs-on: ubuntu-latest
+        needs: Test_job
+        steps:
+            - name: Download ASCII artwork artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: dragon_artwork
+                path: dragon_artwork.txt
+                
+            - name: Display ASCII artwork
+              run: cat dragon_artwork.txt
+
+            - name: Checkout repo files
+              run: ls -ltar
