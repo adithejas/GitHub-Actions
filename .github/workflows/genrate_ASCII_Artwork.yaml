@@ -9,22 +9,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Cowsay program
-        run: sudo apt-get update && sudo apt-get install -y cowsay
+    # Method -1: 
+    #   - name: Install Cowsay program
+    #     run: sudo apt-get update && sudo apt-get install -y cowsay
 
-      - name: Generate ASCII artwork
-        run: cowsay -f dragon "Run for cover, I am a dragon!" >> dragon_artwork.txt
+    #   - name: Generate ASCII artwork
+    #     run: cowsay -f dragon "Run for cover, I am a dragon!" >> dragon_artwork.txt
 
-      - name: Test the file existence
-        run: |
-          if [ -f dragon_artwork.txt ]; then
-            echo "File exists."
-            grep -i "dragon" dragon_artwork.txt
-          else
-            echo "File does not exist."
-          fi
-      - name: Display ASCII artwork
-        run: cat dragon_artwork.txt
+    #   - name: Test the file existence
+    #     run: |
+    #       if [ -f dragon_artwork.txt ]; then
+    #         echo "File exists."
+    #         grep -i "dragon" dragon_artwork.txt
+    #       else
+    #         echo "File does not exist."
+    #       fi
+    #   - name: Display ASCII artwork
+    #     run: cat dragon_artwork.txt
 
-      - name: Checkout repo files
-        run: ls -ltar
+    #   - name: Checkout repo files
+    #     run: ls -ltar
+
+    # Method -2: 
+      - name: Run ASCII artwork shell script
+        run: .github/workflows/ascii_shellscrpir.sh
