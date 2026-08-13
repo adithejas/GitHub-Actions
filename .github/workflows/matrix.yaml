@@ -1,0 +1,21 @@
+name: matrix_testing
+
+on: 
+  workflow_dispatch:
+
+jobs:
+    strategy_matrix:
+        
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+                images: [hello-world, alpine, debian]
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - name: Docker build and push on ${{ matrix.os }} with image ${{ matrix.images }}
+              run: |
+                echo "Building Docker image for OS: ${{ matrix.os }} and Image: ${{ matrix.images }}"
+                docker build -t my-docker-image:${{ matrix.images }} .
+                
+        
