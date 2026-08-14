@@ -1,6 +1,6 @@
 name: If_testing
 on: 
-    workflow_dispatch:
+    push:
 jobs:
   prod-check:
     if: ${{ github.ref == 'refs/heads/main' }}
