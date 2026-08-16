@@ -1,0 +1,20 @@
+name: Calling Docker 
+
+on:
+    push:
+        branches:
+            - main
+            - workflows
+
+jobs:
+    
+    docker:
+        uses: ./.github/workflows/docker.yaml
+        with:
+            environment: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+            docker_registry: docker.io
+            image_name: hello-world
+            image_tag: latest
+        secrets:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

@@ -1,0 +1,89 @@
+name: Docker-Creation
+
+on:
+  workflow_call:
+    inputs:
+
+      environment:
+        description: "GitHub Environment to use"
+        required: true
+        type: string
+        
+      docker_registry:
+        description: "Set docker registry"
+        required: true
+        type: string
+
+      image_name:
+        description: "Set Imange NAME"
+        type: string
+        default: "Hellow-World"
+
+      image_tag:
+        description: "Set Imange Tag"
+        type: string
+        default: "latest"
+
+    secrets:
+      DOCKER_USERNAME:
+        description: "Username"
+        required: true
+
+      DOCKER_PASSWORD:
+        description: "Password"
+        required: true
+
+    outputs:
+      image:
+        value: ${{ jobs.Docker-login.outputs.image }}
+
+      environment:
+        value: ${{ jobs.Docker-login.outputs.environment }}
+        
+        
+jobs:
+   Docker-login:
+    name: Login to docker.io
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    env:
+      DOCKER_REGISTRY: ${{inputs.DOCKER_REGISTRY}}
+      IMAGE_TAG: ${{inputs.IMAGE_TAG}}
+      IMAGE_NAME: ${{inputs.IMAGE_NAME}}
+      DEPLOYMENT_ENVIRONMENT: ${{inputs.environment}}
+
+    outputs:
+
+      image: ${{steps.output.outputs.image}}
+      environment: ${{steps.output.outputs.environment}}
+      
+    steps:
+        - name: Log in to Docker Hub
+          uses: docker/login-action@v4
+          with:
+            registry: ${{ env.DOCKER_REGISTRY }}
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: Pull Docker Image
+          run: |
+            IMAGE="$DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+
+            echo "Pulling Image"
+            echo "$IMAGE"
+
+            docker pull "$IMAGE"
+
+        - name: Run Docker Image
+          run: |
+           IMAGE="$DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+           docker run --rm "$IMAGE"
+
+        - name: Check Output
+          id: output
+          run: |
+            IMAGE="$DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+
+            echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+            echo "environment=$DEPLOYMENT_ENVIRONMENT" >>"$GITHUB_OUTPUT"
